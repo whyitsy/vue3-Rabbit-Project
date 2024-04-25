@@ -17,6 +17,7 @@ defineProps({
     </h3>
   </div>
   <el-button type="success">Success</el-button>
+  <el-button type="primary">Primary</el-button>
 </template>
 
 <style scoped>

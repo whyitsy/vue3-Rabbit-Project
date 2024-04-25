@@ -1,0 +1,60 @@
+在使用 Vite 构建的 Vue 3 项目中更换 Element Plus 的主题颜色，可以通过以下步骤进行：
+
+1. **创建 SCSS 文件**：在你的项目中创建一个新的 SCSS 文件，比如 `element-variables.scss`。
+
+2. **自定义颜色变量**：在该 SCSS 文件中定义你的自定义颜色变量。使用 `@use` 规则导入 Element Plus 的样式，并覆盖所需的颜色变量：
+
+    ```scss
+    // element-variables.scss
+    @use "element-plus/theme-chalk/src/index.scss" as *;
+
+    // 自定义主题颜色
+    :root {
+      --el-color-primary: #409eff; // 这里设置为你想要主题颜色
+      // 可以继续覆盖其他颜色变量
+    }
+    ```
+
+3. **在 `vite.config.js` 中配置 SCSS**：确保你的 `vite.config.js` 文件配置了 SCSS 并引入了自定义的 SCSS 文件：
+
+    ```javascript
+    // vite.config.js
+    import vue from '@vitejs/plugin-vue';
+    import vueJsx from '@vitejs/plugin-vue-jsx';
+    
+    // https://vitejs.dev/config/
+    export default {
+      plugins: [vue(), vueJsx()],
+      css: {
+        preprocessOptions: {
+          scss: {
+            additionalData: `
+              @use "@/assets/scss/element-variables.scss" as *; // 引入自定义的 SCSS 文件
+            `,
+          },
+        },
+      },
+    };
+    ```
+
+4. **在主入口文件中引入 Element Plus**：在你的主入口文件（如 `main.js` 或 `main.ts`）中引入 Element Plus，并确保引入了自定义主题的 SCSS 文件：
+
+    ```javascript
+    import { createApp } from 'vue';
+    import App from './App.vue';
+    import ElementPlus from 'element-plus';
+    import 'element-plus/dist/index.css';
+    import './assets/scss/element-variables.scss'; // 引入自定义的 SCSS 文件
+
+    const app = createApp(App);
+
+    app.use(ElementPlus);
+
+    app.mount('#app');
+    ```
+
+5. **构建和运行**：保存你的更改并重新运行你的 Vue 项目。Element Plus 组件现在应该使用你定义的自定义颜色。
+
+请注意，`@use` 规则是 SCSS 3.5.0 版本引入的，确保你的 SCSS 版本支持此特性。另外，确保你的自定义 SCSS 文件路径正确，并且 Vite 配置正确地指向了该文件。
+
+通过这种方式，你可以在不修改 Element Plus 源码的情况下，通过覆盖 SCSS 变量来自定义你的项目主题。
