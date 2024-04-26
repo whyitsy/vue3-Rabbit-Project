@@ -1,13 +1,15 @@
 <script setup>
+import LayoutHeader from '@/views/Layout/components/LayoutHeader.vue';
+import LayoutFooter from '@/views/Layout/components/LayoutFooter.vue';
+import LayoutNav from '@/views/Layout/components/LayoutNav.vue';
 
 </script>
 
 <template>
-<h1>我是首页</h1>
-<RouterLink to="/Login">登录页</RouterLink><br>
-<RouterLink to="/Category">分类页</RouterLink>
-<!-- RouterView组件就是其子组件需要在当前组件的什么地方进行渲染-->
+<LayoutHeader></LayoutHeader>
+<LayoutNav></LayoutNav>
 <RouterView></RouterView>
+<LayoutFooter></LayoutFooter>
 </template>
 
 <style scoped>
