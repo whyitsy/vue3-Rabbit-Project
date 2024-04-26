@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<h1>我是Home二级子页面</h1>
+<div style="height : 1200px">我是Home二级子页面</div>
 
 </template>
 
