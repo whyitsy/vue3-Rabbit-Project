@@ -1,22 +1,13 @@
 <script setup>
-import { getCategoryApi } from '@/apis/testApi';
-import { onMounted,ref } from 'vue';
+import { useCategoryStore } from '@/stores/category';
 
+const categoryStore = useCategoryStore()
 
-const categoryList = ref([])
-// 再封装一次，可做进一步处理
-const getCategory = async ()=>{
-  const res = await getCategoryApi()
-  console.log(res);
-  categoryList.value = res.data.result
-}
-
-
-// 选择合适的生命周期函数来调用即可
-onMounted(()=>{
-  getCategory()
-})
-
+// 不能这样做，可能是因为setup是在beforeMounted之前执行的，而categoryStore是在onMounted函数中执行的。
+// 导致本地categoryList.value的值为undefined
+// 所以应该直接在模板中使用store
+// categoryList.value = categoryStore.categoryList.value
+// console.log(categoryList);
 </script>
 
 <template>
@@ -26,7 +17,7 @@ onMounted(()=>{
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
       <ul class="app-header-nav">
-        <li class="home" v-for="item in categoryList" :key="item.id">
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
           <RouterLink to="/">{{item.name}}</RouterLink>
         </li>
         
