@@ -8,24 +8,24 @@ const categoryStore = useCategoryStore()
 <template>
   <div class="home-category">
     <ul class="menu">
-      <li v-for="item in categoryStore.categoryList" :key="item.id">
-        <RouterLink to="/">{{ item.name }}</RouterLink>
-        <RouterLink v-for="item in item.children.slice(0, 2)" :key="item.id" to="/">
-          {{ item.name }}
+      <li v-for="item1 in categoryStore.categoryList" :key="item1.id">
+        <RouterLink to="/">{{ item1.name }}</RouterLink>
+        <RouterLink v-for="item2 in item1.children.slice(0, 2)" :key="item2.id" to="/">
+          {{ item2.name }}
         </RouterLink>
         <!-- 弹层layer位置 -->
         <div class="layer">
           <h4>分类推荐 <small>根据您的购买或浏览记录推荐</small></h4>
           <ul>
-            <li v-for="item in item.goods" :key="item.id">
+            <li v-for="item3 in item1.goods" :key="item3.id">
               <RouterLink to="/">
-                <img :src="item.picture" alt="" />
+                <img :src="item3.picture" alt="" />
                 <div class="info">
                   <p class="name ellipsis-2">
-                    {{ item.name }}
+                    {{ item3.name }}
                   </p>
-                  <p class="desc ellipsis">{{ item.desc }}</p>
-                  <p class="price"><i>¥</i>{{ item.price }}</p>
+                  <p class="desc ellipsis">{{ item3.desc }}</p>
+                  <p class="price"><i>¥</i>{{ item3.price }}</p>
                 </div>
               </RouterLink>
             </li>
