@@ -13,3 +13,10 @@ export function getNewApi(){
         url:"/home/new"
     })
 }
+
+// 获取热门好物数据
+export function getHotApi(){
+    return httpInstance({
+        url:"/home/hot"
+    })
+}

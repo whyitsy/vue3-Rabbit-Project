@@ -7,7 +7,7 @@ import { getNewApi } from '@/apis/home';
 const newList = ref([])
 const getNew = async () => {
     const res = await getNewApi()
-    console.log(res);
+    // console.log(res);
     newList.value = res.data.result
 }
 
