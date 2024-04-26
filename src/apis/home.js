@@ -6,3 +6,10 @@ export function getBannerApi(){
         url:"/home/banner"
     })
 }
+
+// 获取新鲜好物数据
+export function getNewApi(){
+    return httpInstance({
+        url:"/home/new"
+    })
+}
