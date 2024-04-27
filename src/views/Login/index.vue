@@ -35,7 +35,7 @@ const rules = {
         }
     ],
     agree:[
-        {
+        {   // 自定义规则
             validator:(rule, value, callback)=>{
                 if(value==false){
                     callback(new Error('请同意协议'))
@@ -45,6 +45,19 @@ const rules = {
             }
         }
     ]
+}
+
+// 3. 获取form实例做统一校验
+const formRef = ref(null)
+const doLogin = ()=>{
+    formRef.value.validate((valide, fields)=>{
+        // valide：如果全部校验通过则为true
+        // fields: 如果未通过校验，则包含未校验通过的校验规则和内容
+        // console.log("valide",valide," fileds",fields);
+        if(valide){
+            // TODO Login
+        }
+    })
 }
 
 </script>
@@ -70,7 +83,7 @@ const rules = {
                 </nav>
                 <div class="account-box">
                     <div class="form">
-                        <el-form :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
+                        <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
                             <el-form-item label="账户" prop="account">
                                 <el-input v-model="form.account" />
                             </el-form-item>
@@ -82,7 +95,7 @@ const rules = {
                                     我已同意隐私条款和服务条款
                                 </el-checkbox>
                             </el-form-item>
-                            <el-button size="large" class="subBtn">点击登录</el-button>
+                            <el-button size="large" @click="doLogin" class="subBtn">点击登录</el-button>
                         </el-form>
                     </div>
                 </div>
