@@ -1,7 +1,12 @@
 <script setup>
 import { reactive, ref } from 'vue';
+import { loginApi } from '@/apis/user';
+import { ElMessage } from 'element-plus';
+// 导入router用于进行路由跳转
+import { useRouter } from 'vue-router';
 
 
+const router = useRouter()
 
 // 表单校验(用户名和密码=>表单对象)
 
@@ -34,12 +39,12 @@ const rules = {
             trigger: 'change'
         }
     ],
-    agree:[
+    agree: [
         {   // 自定义规则
-            validator:(rule, value, callback)=>{
-                if(value==false){
+            validator: (rule, value, callback) => {
+                if (value == false) {
                     callback(new Error('请同意协议'))
-                }else{
+                } else {
                     callback()
                 }
             }
@@ -49,13 +54,19 @@ const rules = {
 
 // 3. 获取form实例做统一校验
 const formRef = ref(null)
-const doLogin = ()=>{
-    formRef.value.validate((valide, fields)=>{
+const doLogin = () => {
+    formRef.value.validate(async (valide, fields) => {
         // valide：如果全部校验通过则为true
         // fields: 如果未通过校验，则包含未校验通过的校验规则和内容
         // console.log("valide",valide," fileds",fields);
-        if(valide){
+        if (valide) {
             // TODO Login
+            const res = await loginApi(form)
+            console.log(res);
+            // 1. 提示用户成功登录结果，登录失败在拦截器中处理
+            ElMessage({ type: 'success', message: "登录成功" })
+            // 2. 跳转首页
+            router.replace('/')
         }
     })
 }
@@ -83,7 +94,8 @@ const doLogin = ()=>{
                 </nav>
                 <div class="account-box">
                     <div class="form">
-                        <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
+                        <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px"
+                            status-icon>
                             <el-form-item label="账户" prop="account">
                                 <el-input v-model="form.account" />
                             </el-form-item>
