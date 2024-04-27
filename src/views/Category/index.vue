@@ -3,7 +3,7 @@ import { getCategoryContentApi } from '@/apis/category';
 import { onMounted, ref } from 'vue';
 import HomeGoodsItem from '@/views/Home/components/HomeGoodsItem.vue';
 // 获取路由参数
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 // 轮播图api
 import { getBannerApi } from '@/apis/home';
 
@@ -11,8 +11,8 @@ import { getBannerApi } from '@/apis/home';
 // 定义数据-object类型
 const CategoryContent = ref({})
 const route = useRoute()
-const getCategoryContent = async () => {
-    const res = await getCategoryContentApi(route.params.id)
+const getCategoryContent = async (id=route.params.id) => {
+    const res = await getCategoryContentApi(id)
     CategoryContent.value = res.data.result
 }
 
@@ -30,6 +30,12 @@ const getBanner = async () => {
 onMounted(() => {
     getCategoryContent(),
         getBanner()
+})
+
+// 在路由发生变化前会调用的AOP函数
+onBeforeRouteUpdate((to)=>{
+    // console.log(to);
+    getCategoryContent(to.params.id)
 })
 
 </script>
