@@ -1,8 +1,20 @@
 <script setup>
 import { useRoute } from 'vue-router';
+import { getCategoryFilterApi } from '@/apis/category';
+import { onMounted, ref } from 'vue';
 
+
+// 获取面包屑导航及数据
 const route = useRoute()
+const categoryFilterData = ref([])
+const getCategoryFilter = async () => {
+  const res = await getCategoryFilterApi(route.params.id)
+  categoryFilterData.value = res.data.result
+}
 
+onMounted(() => {
+  getCategoryFilter()
+})
 
 
 
@@ -14,19 +26,18 @@ const route = useRoute()
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/' }">居家
+        <el-breadcrumb-item
+          :to="{ path: `/category/${categoryFilterData.parentId}` }">{{ categoryFilterData.parentName }}
         </el-breadcrumb-item>
-        <el-breadcrumb-item>居家生活用品</el-breadcrumb-item>
+        <el-breadcrumb-item>{{categoryFilterData.name}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="sub-container">
       <el-tabs>
-        <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
-        <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
-        <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
+        <el-tab-pane v-for="item in categoryFilterData.categories" :key="item.id" label="最新商品" name="publishTime"></el-tab-pane>
       </el-tabs>
       <div class="body">
-         <!-- 商品列表-->
+        <!-- 商品列表-->
       </div>
     </div>
   </div>
