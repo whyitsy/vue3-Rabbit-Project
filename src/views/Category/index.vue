@@ -1,10 +1,12 @@
 <script setup>
 import { getCategoryContentApi } from '@/apis/category';
 import { onMounted, ref } from 'vue';
+import HomeGoodsItem from '@/views/Home/components/HomeGoodsItem.vue';
 // 获取路由参数
 import { useRoute } from 'vue-router'
 // 轮播图api
 import { getBannerApi } from '@/apis/home';
+
 
 // 定义数据-object类型
 const CategoryContent = ref({})
@@ -18,7 +20,7 @@ const getCategoryContent = async () => {
 const bannerList = ref([])
 const getBanner = async () => {
     const res = await getBannerApi({
-        'distributionSite':'2'
+        'distributionSite': '2'
     })
     // console.log(res);
     bannerList.value = res.data.result
@@ -27,7 +29,7 @@ const getBanner = async () => {
 
 onMounted(() => {
     getCategoryContent(),
-    getBanner()
+        getBanner()
 })
 
 </script>
@@ -49,6 +51,26 @@ onMounted(() => {
                         <img :src="item.imgUrl" alt="">
                     </el-carousel-item>
                 </el-carousel>
+            </div>
+            <!-- 分类列表 -->
+            <div class="sub-list">
+                <h3>全部分类</h3>
+                <ul>
+                    <li v-for="i in CategoryContent.children" :key="i.id">
+                        <RouterLink to="/">
+                            <img :src="i.picture" />
+                            <p>{{ i.name }}</p>
+                        </RouterLink>
+                    </li>
+                </ul>
+            </div>
+            <div class="ref-goods" v-for="item in CategoryContent.children" :key="item.id">
+                <div class="head">
+                    <h3>- {{ item.name }}-</h3>
+                </div>
+                <div class="body">
+                    <HomeGoodsItem v-for="good in item.goods" :good ="good" :key="good.id" />
+                </div>
             </div>
         </div>
     </div>
@@ -137,6 +159,7 @@ onMounted(() => {
 .home-banner {
     width: 1240px;
     height: 500px;
+
     margin: 0 auto;
 
     img {
