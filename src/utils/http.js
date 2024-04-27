@@ -2,21 +2,22 @@
 import axios from "axios";
 import { ElMessage } from "element-plus";
 import { useUserStore } from "@/stores/user";
-
+import router from "@/router";
 
 const httpInstance = axios.create({
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
   timeout: 2000
 })
 
-// copy官方文档示例
+
+
+
 // 添加请求拦截器
 httpInstance.interceptors.request.use(function (config) {
-  // 在发送的请求中携带token
+  // 统一在发送的请求中携带token
   const userStore = useUserStore()
-  
   const token = userStore.userInfo.token
-  if(token){
+  if (token) {
     // 将token拼接后放入Authorization中
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -34,14 +35,27 @@ httpInstance.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
   // 超出 2xx 范围的状态码都会触发该函数。
-  // 对响应错误做点什么 
+
+  // 用户信息Store, 不能定义在函数外面，外面
+  const userStore = useUserStore()
+
 
   // 统一处理错误提示
   ElMessage({
-    type:"warning",
-    message:error.response.data.message
+    type: "warning",
+    message: error.response.data.message
   })
+
+
+  // 401token失效处理
+  // 1. 清除本地用户数据 2. 跳转到登录页
+  if (error.response.status === 401) {
+    userStore.clearUserInfo()
+    router.push('/login')
+  }
+
   return Promise.reject(error);
+
 });
 
 
