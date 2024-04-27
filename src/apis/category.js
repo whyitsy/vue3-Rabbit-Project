@@ -11,12 +11,30 @@ export function getCategoryContentApi(id){
     })
 }
 
-// 获取二级分类的数据
+// 获取二级分类导航的数据
 export function getCategoryFilterApi(id){
     return httpInstance({
         url:'category/sub/filter',
         params:{
             id
         }
+    })
+}
+
+// 获取二级分类的产品数据
+/**
+ * @param {
+ * categoryId,
+ * page,
+ * pageSize,
+ * sortField: "publishTime" | "orderNum" | "evaluateNum"
+ * } data 
+ * 
+ */
+export function getSubCategoryApi(data){
+    return httpInstance({
+        url:'/category/goods/temporary',
+        method:'POST',
+        data
     })
 }

@@ -1,8 +1,9 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import { getCategoryFilterApi } from '@/apis/category';
+import { getCategoryFilterApi, getSubCategoryApi } from '@/apis/category';
 import { onMounted, ref } from 'vue';
 
+import HomeGoodsItem from '@/views/Home/components/HomeGoodsItem.vue';
 
 // 获取面包屑导航及数据
 const route = useRoute()
@@ -16,7 +17,23 @@ onMounted(() => {
   getCategoryFilter()
 })
 
+// 获取基础列表数据渲染
+const goodList = ref([])
+const reqData = ref({
+  categoryId: route.params.id,
+  page: 1,
+  pageSize: 20,
+  sortFiled: 'publishTime'
 
+})
+const getSubCategory = async () => {
+  const res = await getSubCategoryApi(reqData.value)
+  goodList.value = res.data.result.items
+}
+
+onMounted(() => {
+  getSubCategory()
+})
 
 </script>
 
@@ -26,18 +43,22 @@ onMounted(() => {
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item
-          :to="{ path: `/category/${categoryFilterData.parentId}` }">{{ categoryFilterData.parentName }}
+        <el-breadcrumb-item :to="{ path: `/category/${categoryFilterData.parentId}` }">{{ categoryFilterData.parentName
+          }}
         </el-breadcrumb-item>
-        <el-breadcrumb-item>{{categoryFilterData.name}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ categoryFilterData.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
+    <!-- 产品列表 -->
     <div class="sub-container">
       <el-tabs>
-        <el-tab-pane v-for="item in categoryFilterData.categories" :key="item.id" label="最新商品" name="publishTime"></el-tab-pane>
+        <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
+        <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
+        <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
       <div class="body">
         <!-- 商品列表-->
+        <HomeGoodsItem v-for="good in goodList" :good="good" :key="good.id"></HomeGoodsItem>
       </div>
     </div>
   </div>
