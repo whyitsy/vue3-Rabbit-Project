@@ -16,7 +16,8 @@ const router = createRouter({
           component:()=>import("@/views/Home/index.vue")
         },
         {
-          path:'category',
+          // 分类区域根据分类id路由到对应的页面
+          path:'category/:id',
           name:'home.category',
           component:()=>import("@/views/Category/index.vue")
         }
