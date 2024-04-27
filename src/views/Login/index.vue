@@ -1,12 +1,13 @@
 <script setup>
 import { reactive, ref } from 'vue';
-import { loginApi } from '@/apis/user';
 import { ElMessage } from 'element-plus';
 // 导入router用于进行路由跳转
 import { useRouter } from 'vue-router';
-
+// 导入pinia
+import { useUserStore } from '@/stores/user';
 
 const router = useRouter()
+const userStore = useUserStore()
 
 // 表单校验(用户名和密码=>表单对象)
 
@@ -60,9 +61,9 @@ const doLogin = () => {
         // fields: 如果未通过校验，则包含未校验通过的校验规则和内容
         // console.log("valide",valide," fileds",fields);
         if (valide) {
-            // TODO Login
-            const res = await loginApi(form)
-            console.log(res);
+            // 将用户数据放在pinia中进行管理
+            await userStore.getUserInfo(form)
+            // console.log(res);
             // 1. 提示用户成功登录结果，登录失败在拦截器中处理
             ElMessage({ type: 'success', message: "登录成功" })
             // 2. 跳转首页
