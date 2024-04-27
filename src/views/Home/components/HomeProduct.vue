@@ -7,7 +7,7 @@ import HomeGoodsItem from './HomeGoodsItem.vue';
 const goodsList = ref({})
 const getGoods = async ()=>{
     const res = await getGoodsApi()
-    console.log(res);
+    // console.log(res);
     goodsList.value = res.data.result
 }
 
