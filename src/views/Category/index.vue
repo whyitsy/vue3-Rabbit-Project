@@ -1,42 +1,14 @@
 <script setup>
-import { getCategoryContentApi } from '@/apis/category';
-import { onMounted, ref } from 'vue';
 import HomeGoodsItem from '@/views/Home/components/HomeGoodsItem.vue';
-// 获取路由参数
-import { onBeforeRouteUpdate, useRoute } from 'vue-router'
-// 轮播图api
-import { getBannerApi } from '@/apis/home';
+import { useBanner } from './composable/useBanner';
+import { useCategory } from './composable/useCategory';
 
+// 解构出来的数据是可以直接使用的
+// 获取banner数据
+const { bannerList } = useBanner()
 
-// 定义数据-object类型
-const CategoryContent = ref({})
-const route = useRoute()
-const getCategoryContent = async (id=route.params.id) => {
-    const res = await getCategoryContentApi(id)
-    CategoryContent.value = res.data.result
-}
-
-// 获取banner
-const bannerList = ref([])
-const getBanner = async () => {
-    const res = await getBannerApi({
-        'distributionSite': '2'
-    })
-    // console.log(res);
-    bannerList.value = res.data.result
-}
-
-
-onMounted(() => {
-    getCategoryContent(),
-        getBanner()
-})
-
-// 在路由发生变化前会调用的AOP函数
-onBeforeRouteUpdate((to)=>{
-    // console.log(to);
-    getCategoryContent(to.params.id)
-})
+// 获取分类数据
+const { CategoryContent } = useCategory()
 
 </script>
 
@@ -75,7 +47,7 @@ onBeforeRouteUpdate((to)=>{
                     <h3>- {{ item.name }}-</h3>
                 </div>
                 <div class="body">
-                    <HomeGoodsItem v-for="good in item.goods" :good ="good" :key="good.id" />
+                    <HomeGoodsItem v-for="good in item.goods" :good="good" :key="good.id" />
                 </div>
             </div>
         </div>
