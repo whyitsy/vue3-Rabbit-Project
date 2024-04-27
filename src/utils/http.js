@@ -1,16 +1,26 @@
 // axios基础的封装
 import axios from "axios";
 import { ElMessage } from "element-plus";
+import { useUserStore } from "@/stores/user";
+
 
 const httpInstance = axios.create({
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
   timeout: 2000
 })
 
-// copy官方文档的拦截器
+// copy官方文档示例
 // 添加请求拦截器
 httpInstance.interceptors.request.use(function (config) {
-  // 在发送请求之前做些什么
+  // 在发送的请求中携带token
+  const userStore = useUserStore()
+  
+  const token = userStore.userInfo.token
+  if(token){
+    // 将token拼接后放入Authorization中
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
   return config;
 }, function (error) {
   // 对请求错误做些什么
