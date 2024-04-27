@@ -6,7 +6,7 @@ import { onMounted, ref } from 'vue';
 const hotList = ref([])
 const getHot = async ()=>{
     const res = await getHotApi()
-    console.log(res);
+    // console.log(res);
     hotList.value = res.data.result
 }
 
