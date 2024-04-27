@@ -8,7 +8,8 @@ import { reactive, ref } from 'vue';
 // 1. 准备表单对象
 const form = reactive({
     account: "",
-    password: ""
+    password: "",
+    agree: false
 })
 
 // 2. 准备校验对象
@@ -24,13 +25,24 @@ const rules = {
         {
             required: true,
             message: "密码不能为空",
-            trigger: 'blur'
+            trigger: 'change'
         },
         {
             min: 3,
             max: 10,
             message: "密码长度必须为3-10",
-            trigger: 'blur'
+            trigger: 'change'
+        }
+    ],
+    agree:[
+        {
+            validator:(rule, value, callback)=>{
+                if(value==false){
+                    callback(new Error('请同意协议'))
+                }else{
+                    callback()
+                }
+            }
         }
     ]
 }
@@ -65,8 +77,8 @@ const rules = {
                             <el-form-item label="密码" prop="password">
                                 <el-input v-model="form.password" />
                             </el-form-item>
-                            <el-form-item label-width="22px">
-                                <el-checkbox size="large">
+                            <el-form-item prop="agree" label-width="22px">
+                                <el-checkbox v-model="form.agree" size="large">
                                     我已同意隐私条款和服务条款
                                 </el-checkbox>
                             </el-form-item>
