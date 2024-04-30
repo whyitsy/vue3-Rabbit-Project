@@ -39,10 +39,29 @@ onMounted(() => {
 
 // 当tab切换时重新拿数据
 const onTabChange = ()=>{
-  console.log("tab切换了");
+  // console.log("tab切换了");
   // 重置页数，切换筛选之后从第一页开始
   reqData.value.page = 1
+  // 启动无限加载，有可能被关闭了
+  infiniteDisable.value = false
   getSubCategory()
+}
+
+// 无限滚动，el在滑到底部时自动触发加载方法-分页的更舒服的方法
+const infiniteDisable = ref(false) // 用于结束监听分页
+
+const load = async ()=>{
+  // console.log("触发加载了");
+  reqData.value.page++
+  // 将新数据拼接到之前的数据后面，使用...展开语法
+  const res = await getSubCategoryApi(reqData.value)
+  goodList.value = [...goodList.value,...res.data.result.items]
+
+  // 如果没有更多的数据就停止监听,可以在接口数据中传回来最大页数，这里是返回数据为空就表示没数据了
+  if(res.data.result.items.length === 0){
+    // console.log("停止监听分页了");
+    infiniteDisable.value = true
+  }
 }
 
 </script>
@@ -66,7 +85,7 @@ const onTabChange = ()=>{
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body">
+      <div class="body" v-infinite-scroll="load" :infinite-scroll-disabled="infiniteDisable">
         <!-- 商品列表-->
         <HomeGoodsItem v-for="good in goodList" :good="good" :key="good.id"></HomeGoodsItem>
       </div>
