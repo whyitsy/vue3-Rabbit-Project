@@ -39,7 +39,6 @@ httpInstance.interceptors.response.use(function (response) {
   // 用户信息Store, 不能定义在函数外面，外面
   const userStore = useUserStore()
 
-
   // 统一处理错误提示
   ElMessage({
     type: "warning",
