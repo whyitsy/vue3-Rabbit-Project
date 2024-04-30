@@ -35,7 +35,13 @@ const router = createRouter({
       component: () => import("@/views/Login/index.vue")
     }
 
-  ]
+  ],
+  scrollBehavior(){
+    return {
+      // 路由切换的时候切换到页面顶部
+      top:0
+    }
+  }
 })
 
 export default router
