@@ -3,6 +3,8 @@ import { getHotGoodsApi } from '@/apis/detail';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
+
+
 const props = defineProps({
   hotType: Number
 })
@@ -23,7 +25,7 @@ const getHotGoods = async () => {
     id: route.params.id,
     type: props.hotType
   })
-  console.log(res);
+  // console.log(res);
   detailHotList.value = res.data.result
 }
 

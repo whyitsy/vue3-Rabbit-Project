@@ -16,6 +16,8 @@ import '@/styles/common.scss'
 // 引入懒加载插件
 import { lazyImgPlugin } from '@/directives'
 
+// 引入全局组件插件
+import { componentsPlugin } from '@/components'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
@@ -27,6 +29,7 @@ app.use(router)
 app.use(ElementPlus)
 app.use(lazyImgPlugin)
 app.use(pinia)
+app.use(componentsPlugin)
 
 app.mount('#app')
 
