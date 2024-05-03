@@ -1,5 +1,14 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 
+import { useUserStore } from '@/stores/user'
+
+const isLogin = () => {
+  const userStore = useUserStore()
+  if (userStore.userInfo.token) {
+    return true
+  }
+  return false
+}
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -48,6 +57,19 @@ const router = createRouter({
       top: 0
     }
   }
+})
+
+router.beforeEach((to, from) => {
+  // 未登录就只能访问登录页
+  if (!isLogin() && to.name != 'login') {
+    return { name: "login" }
+  }
+  // 登陆了就不能访问登录页
+  if (isLogin() && to.name == 'login') {
+    return { name: from.name }
+  }
+  // 其余情况正常路由
+  return true
 })
 
 export default router

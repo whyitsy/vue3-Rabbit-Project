@@ -25,10 +25,10 @@ pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
 
 
-app.use(router)
 app.use(ElementPlus)
 app.use(lazyImgPlugin)
 app.use(pinia)
+app.use(router)
 app.use(componentsPlugin)
 
 app.mount('#app')
